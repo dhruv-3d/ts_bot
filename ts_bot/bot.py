@@ -11,7 +11,8 @@ except ImportError:
     import tkinter.ttk as ttk
     import tkinter.scrolledtext as ScrolledText
 import time
-from parse_webpage import TimeSheetInfo
+from parse_webpage import TimeSheetInfo as TS
+import actions as act
 
 class BotGUI(tk.Tk):
 
@@ -81,7 +82,10 @@ class BotGUI(tk.Tk):
         user_input = self.usr_input.get()
         self.usr_input.delete(0, tk.END)
 
-        # response = self.gen_resp(user_input)
+        # checking for actions keywords
+        
+
+
         response = self.chatbot.get_response(user_input)
 
         self.conversation['state'] = 'normal'
@@ -91,30 +95,15 @@ class BotGUI(tk.Tk):
         self.conversation['state'] = 'disabled'
         
         time.sleep(0.5)
-        self.do_stuff(response)
 
-    def gen_resp(user_input):
-        ip = []
-        ip = user_input.split()
-        if('timesheet' in ip):
-            response = self.do_stuff()
-        else:
-            response = self.chatbot.get_response(user_input)
-            return response
 
-    def do_stuff(self, response):
-        """
-        You can call the fucntions here for the stuff to be done by the bot on particular resp.
-        """
-        
-        # pr_list = TimeSheetInfo.fetch_project_info()
-        #aa bhangar che.. dynamic banavanu che
-        # resp = 'Please select your project: \n' + pr_list[0] + '\n' + pr_list[1] + '\n'
+    def check_act(ip):
+        ip = ip.split()
 
-        return response
-        # open timesheet in browser
-        # url = "http://192.168.1.201:81/EasyCollab/time_sheets"
-        # wb.get("chrome").open(url)
+        if ip in act.actions:
+            for i in act.action_keywords:
+                if i in ip:
+                    perform_action(i)
 
 bot_gui = BotGUI()
 bot_gui.mainloop()
